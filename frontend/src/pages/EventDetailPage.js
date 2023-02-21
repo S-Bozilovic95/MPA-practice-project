@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useLoaderData, useRouteLoaderData } from "react-router-dom";
+import { redirect, useLoaderData, useRouteLoaderData } from "react-router-dom";
 import EventItem from "../components/EventItem";
 
 export const getSingleEventLoader = async ({ request, params }) => {
@@ -15,10 +15,19 @@ export const getSingleEventLoader = async ({ request, params }) => {
   }
 };
 
+export const deleteEventAction = async ({ params }) => {
+  try {
+    await axios.delete(`http://localhost:8080/events/${params.eventId}`);
+    return redirect("/events");
+  } catch (err) {
+    const errorObj = { message: err.message, status: err.response.status };
+    throw errorObj;
+  }
+};
+
 const EventDetailPage = () => {
   // const data = useLoaderData()
   const data = useRouteLoaderData("event-detail");
-  console.log(data);
 
   return (
     <>
